@@ -2,7 +2,15 @@ const express = require('express')
 const router = express.Router()
 const Asistencia = require('../models/Asistencia')
 
-router.get('/asistencias', (req, res) => {
+isAuth = (req, res, next) => {
+  if (req.isAuthenticated() && req.user.status === 'Activo') {
+    next()
+  } else {
+    res.redirect('/auth/login')
+  }
+}
+
+router.get('/asistencias', isAuth, (req, res) => {
   const { user } = req
   Asistencia.find({ status: 'Confirmación pendiente' })
     .populate('solicitante')
@@ -11,12 +19,12 @@ router.get('/asistencias', (req, res) => {
     })
 })
 
-router.get('/asistencias/nueva', (req, res) => {
+router.get('/asistencias/nueva', isAuth, (req, res) => {
   const { user } = req
   res.status(201).json({ user, isUser: 'isUser' })
 })
 
-router.post('/asistencias/nueva', (req, res, next) => {
+router.post('/asistencias/nueva', isAuth, (req, res, next) => {
   let images = req.files.map(file => file.url)
   let { _id: solicitante } = req.user
   let { lat, lng, address, ...asistencia } = req.body
@@ -31,7 +39,7 @@ router.post('/asistencias/nueva', (req, res, next) => {
     })
 })
 
-router.get('/asistencias/:id/editar', (req, res, next) => {
+router.get('/asistencias/:id/editar', isAuth, (req, res, next) => {
   const { id } = req.params
   Asistencia.findById(id)
     .then(asistencia => {
@@ -42,7 +50,7 @@ router.get('/asistencias/:id/editar', (req, res, next) => {
     })
 })
 
-router.post('/asistencias/:id/editar', (req, res) => {
+router.post('/asistencias/:id/editar', isAuth, (req, res) => {
   const { id: _id } = req.params
   let { lat, lng, address, ...asistencia } = req.body
   let location = { address, coordinates: [lat, lng] }
@@ -56,18 +64,18 @@ router.post('/asistencias/:id/editar', (req, res) => {
     })
 })
 
-router.post('/asistencias', (req, res) => {
+router.post('/asistencias', isAuth, (req, res) => {
   let { _id: fixer } = req.user
   let { id } = req.body
   Asistencia.findByIdAndUpdate(id, { status: 'Aceptada', fixer: fixer }).then(() => res.status(201).json())
 })
 
-router.post('/asistencias/cancelar', (req, res) => {
+router.post('/asistencias/cancelar', isAuth, (req, res) => {
   let { id } = req.body
   Asistencia.findByIdAndUpdate(id, { status: 'Cancelada' }).then(() => res.status(201).json())
 })
 
-router.get('/asistencias/:id', (req, res) => {
+router.get('/asistencias/:id', isAuth, (req, res) => {
   const { id } = req.params
   const { user } = req
   Asistencia.findById(id)

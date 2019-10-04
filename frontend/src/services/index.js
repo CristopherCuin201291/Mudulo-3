@@ -10,19 +10,16 @@ const SERVICE = axios.create({ withCredentials: true, baseURL });
 
 const MY_SERVICE = {
   test: async () => {
-    return await SERVICE.get('/');
+    return await SERVICE.get('/')
   },
-  signup: async (user) => {
-    return await SERVICE.post('/signup', user);
+  signup: async user => {
+    return await SERVICE.post('/signup', user)
   },
-  login: async (user) => {
-    return await SERVICE.post('/login', user);
+  login: async user => {
+    return await SERVICE.post('/login', user)
   },
   logOut: async () => {
-    return await SERVICE.get('/logout');
-  },
-  getPerfil: async()=>{
-    return await SERVICE.get('/perfil')
+    return await SERVICE.get('/logout')
   }
 };
 

@@ -1,34 +1,36 @@
-import React, { Component, createContext } from 'react';
-import MY_SERVICE from '../services/index';
+import React, { Component, createContext } from 'react'
+import MY_SERVICE from '../services'
 
-export const MyContext = createContext();
+export const MyContext = createContext()
 
 class MyProvider extends Component {
   state = {
     loggedUser: null
-  };
+  }
 
-  logUser = (loggedUser) => {
-    this.setState({ loggedUser });
-  };
+  logUser = loggedUser => {
+    console.log('este es el usuario de login a context', loggedUser)
+    this.setState({ loggedUser })
+  }
 
   logOut = () => {
     MY_SERVICE.logOut()
-      .then((response) => {
-        console.log(response);
+      .then(response => {
+        localStorage.clear()
+        console.log(response)
         this.setState({ loggedUser: null })
       })
-      .catch((err) => console.log(err));
-  };
+      .catch(err => console.log(err))
+  }
 
   render() {
-    const { state, logUser, logOut } = this;
+    const { state, logUser, logOut } = this
     return (
       <MyContext.Provider value={{ state, logUser, logOut }}>
         {this.props.children}
       </MyContext.Provider>
-    );
+    )
   }
 }
 
-export default MyProvider;
+export default MyProvider

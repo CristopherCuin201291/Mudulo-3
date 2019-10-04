@@ -17,8 +17,16 @@ code {
   height: 100vh !important;
 }
 
-.Info{
-display: flex;
- align-items: center;
+.Info {
+  display: flex;
+  align-items: center;
   justify-content: center;
+}
+
+.footer {
+  background-color: #209cee !important;
+}
+
+.footer-text {
+  color: white !important;
 }

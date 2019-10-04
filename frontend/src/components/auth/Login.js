@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import MY_SERVICE from '../../services/index';
+import image from "../home/carfixlogo.png"
+import Footer from '../footer/Footer'
 
 export default class Login extends Component {
   state = {
@@ -17,7 +19,6 @@ export default class Login extends Component {
     e.preventDefault();
     MY_SERVICE.login(this.state.user)
       .then((response) => {
-        this.context.logUser(response.data.user)
         console.log(response.data);
         this.props.history.push('/auth/perfil')
       })
@@ -28,11 +29,14 @@ export default class Login extends Component {
   render() {
     return (
       <div>
-        <section className="hero is-medium is-info is-bold">
+        <section className="hero is-medium is-info">
           <div className="columns is-mobile is-centered ">
             <div className="box">
+              <img src={image} width="30%" height="20%" alt="" />
+              <label className="label">Iniciar Sesión</label>
+
               <form onSubmit={this.onSubmit}>
-                <label className="label">Iniciar Sesión</label>
+
                 <div className="field">
                   <div className="control has-icons-left has-icons-right">
                     <input onChange={this.handleInput} name="email" className="input is-success" type="email" placeholder="ejemplo@mail.com" />
@@ -62,10 +66,14 @@ export default class Login extends Component {
                     <button className="button is-success" type="submit">Enviar</button>
                   </div>
                 </div>
+
               </form>
+
             </div>
+
           </div>
         </section>
+        <Footer />
       </div>
     )
   }

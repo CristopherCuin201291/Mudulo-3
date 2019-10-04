@@ -2,7 +2,16 @@ const express = require('express')
 const router = express.Router()
 const User = require('../models/User')
 
-router.get('/perfil', (req, res) => {
+isAuth = (req, res, next) => {
+  if (req.isAuthenticated() && req.user.status === 'Activo') {
+    next()
+  } else {
+    res.redirect('/auth/login')
+  }
+}
+
+router.get('/perfil', isAuth,(req, res) => {
+
   const { user } = req
   if (user.role === 'User') {
     Asistencia.find({ solicitante: user._id })
@@ -19,7 +28,7 @@ router.get('/perfil', (req, res) => {
   }
 })
 
-router.get('/perfil/:id/editar', (req, res) => {
+router.get('/perfil/:id/editar', isAuth, (req, res) => {
   const { id } = req.params
   User.findById(id)
     .then(user => {
@@ -30,7 +39,7 @@ router.get('/perfil/:id/editar', (req, res) => {
     })
 })
 
-router.post('/perfil/:id/editar', (req, res) => {
+router.post('/perfil/:id/editar', isAuth,(req, res) => {
   const { id: _id } = req.params
   const { email } = req.user
   const image = req.file ? req.file.url : undefined
