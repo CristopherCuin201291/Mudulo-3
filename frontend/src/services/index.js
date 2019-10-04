@@ -20,6 +20,9 @@ const MY_SERVICE = {
   },
   logOut: async () => {
     return await SERVICE.get('/logout');
+  },
+  getPerfil: async()=>{
+    return await SERVICE.get('/perfil')
   }
 };
 

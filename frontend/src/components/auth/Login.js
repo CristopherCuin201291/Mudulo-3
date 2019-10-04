@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import MY_SERVICE from '../../services/index';
-import 'bulma/css/bulma.css'
 
 export default class Login extends Component {
   state = {
@@ -18,8 +17,9 @@ export default class Login extends Component {
     e.preventDefault();
     MY_SERVICE.login(this.state.user)
       .then((response) => {
+        this.context.logUser(response.data.user)
         console.log(response.data);
-        this.props.history.push('/auth/login')
+        this.props.history.push('/auth/perfil')
       })
       .catch((error) => {
         console.log(error);
